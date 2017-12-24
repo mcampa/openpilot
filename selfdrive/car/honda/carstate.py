@@ -6,7 +6,7 @@ from selfdrive.can.parser import CANParser
 from selfdrive.config import Conversions as CV
 import numpy as np
 
-def parse_gear_shifter(can_gear_shifter, is_acura):
+def parse_gear_shifter(can_gear_shifter, is_acura, is_pilot):
 
   if can_gear_shifter == 0x1:
     return "park"
@@ -20,7 +20,15 @@ def parse_gear_shifter(can_gear_shifter, is_acura):
       return "drive"
     elif can_gear_shifter == 0xa:
       return "sport"
-
+  
+  elif is_pilot:
+     if can_gear_shifter == 0x8:
+       return "reverse"
+     elif can_gear_shifter == 0x4:
+       return "park"
+     elif can_gear_shifter == 0x20:
+       return "drive"
+ 
   else:
     if can_gear_shifter == 0x4:
       return "neutral"
@@ -261,6 +269,59 @@ def get_can_signals(CP):
       (0x324, 10),
       (0x405, 3),
     ]
+  elif CP.carFingerprint == "HONDA PILOT 2017 TOURING":
+    dbc_f = 'honda_pilot_touring_2017_can.dbc'
+    signals = [
+      ("XMISSION_SPEED", 0x158, 0),
+      ("WHEEL_SPEED_FL", 0x1d0, 0),
+      ("WHEEL_SPEED_FR", 0x1d0, 0),
+      ("WHEEL_SPEED_RL", 0x1d0, 0),
+      ("WHEEL_SPEED_RR", 0x1d0, 0),
+      ("STEER_ANGLE", 0x156, 0),
+      ("STEER_ANGLE_RATE", 0x156, 0),
+      ("STEER_TORQUE_SENSOR", 0x18f, 0),
+      ("GEAR", 0x1a3, 0),
+      ("WHEELS_MOVING", 0x1b0, 1),
+      ("DOOR_OPEN_FL", 0x405, 1),
+      ("DOOR_OPEN_FR", 0x405, 1),
+      ("DOOR_OPEN_RL", 0x405, 1),
+      ("DOOR_OPEN_RR", 0x405, 1),
+      ("CRUISE_SPEED_PCM", 0x324, 0),
+      ("SEATBELT_DRIVER_LAMP", 0x305, 1),
+      ("SEATBELT_DRIVER_LATCHED", 0x305, 0),
+      ("BRAKE_PRESSED", 0x17c, 0),
+      ("BRAKE_SWITCH", 0x17c, 0),
+      ("CAR_GAS", 0x130, 0),
+      ("CRUISE_BUTTONS", 0x1a6, 0),
+      ("ESP_DISABLED", 0x1a4, 1),
+      ("HUD_LEAD", 0x30c, 0),
+      ("USER_BRAKE", 0x1a4, 0),
+      ("STEER_STATUS", 0x18f, 5),
+      ("BRAKE_ERROR_1", 0x1b0, 1),
+      ("BRAKE_ERROR_2", 0x1b0, 1),
+      ("GEAR_SHIFTER", 0x1a3, 0),
+      ("MAIN_ON", 0x1a6, 0),
+      ("ACC_STATUS", 0x17c, 0),
+      ("PEDAL_GAS", 0x17c, 0),
+      ("CRUISE_SETTING", 0x1a6, 0),
+      ("LEFT_BLINKER", 0x294, 0),
+      ("RIGHT_BLINKER", 0x294, 0),
+      ("CRUISE_SPEED_OFFSET", 0x37c, 0)
+    ]
+    checks = [
+      (0x156, 100),
+      (0x158, 100),
+      (0x17c, 100),
+      (0x1a3, 50),
+      (0x1a4, 50),
+      (0x1a6, 50),
+      (0x1b0, 50),
+      (0x1d0, 50),
+      (0x305, 10),
+      (0x324, 10),
+      (0x37c, 10),
+      (0x405, 3),
+    ]    
   # add gas interceptor reading if we are using it
   if CP.enableGas:
     signals.append(("INTERCEPTOR_GAS", 0x201, 0))
@@ -278,6 +339,7 @@ class CarState(object):
     self.civic = False
     self.accord = False
     self.crv = False
+    self.pilot = False
     if CP.carFingerprint == "HONDA CIVIC 2016 TOURING":
       self.civic = True
     elif CP.carFingerprint == "ACURA ILX 2016 ACURAWATCH PLUS":
@@ -286,6 +348,8 @@ class CarState(object):
       self.accord = True
     elif CP.carFingerprint == "HONDA CR-V 2016 TOURING":
       self.crv = True
+    elif CP.carFingerprint == "HONDA PILOT 2017 TOURING":
+      self.pilot = True  
     else:
       raise ValueError("unsupported car %s" % CP.carFingerprint)
 
@@ -432,8 +496,22 @@ class CarState(object):
       self.cruise_speed_offset = calc_cruise_offset(cp.vl[0x37c]['CRUISE_SPEED_OFFSET'], self.v_ego)
       self.park_brake = 0  # TODO
       self.brake_hold = 0
+    elif self.pilot:
+      can_gear_shifter = cp.vl[0x1A3]['GEAR_SHIFTER']
+      self.angle_steers = cp.vl[0x156]['STEER_ANGLE']
+      self.angle_steers_rate = cp.vl[0x156]['STEER_ANGLE_RATE']
+      self.gear = cp.vl[0x1A3]['GEAR']
+      self.cruise_setting = cp.vl[0x1A6]['CRUISE_SETTING']
+      self.cruise_buttons = cp.vl[0x1A6]['CRUISE_BUTTONS']
+      self.main_on = cp.vl[0x1A6]['MAIN_ON']
+      self.blinker_on = cp.vl[0x294]['LEFT_BLINKER'] or cp.vl[0x294]['RIGHT_BLINKER']
+      self.left_blinker_on = cp.vl[0x294]['LEFT_BLINKER']
+      self.right_blinker_on = cp.vl[0x294]['RIGHT_BLINKER']
+      self.cruise_speed_offset = calc_cruise_offset(cp.vl[0x37c]['CRUISE_SPEED_OFFSET'], self.v_ego)
+      self.park_brake = 0  # TODO
+      self.brake_hold = 0    
 
-    self.gear_shifter = parse_gear_shifter(can_gear_shifter, self.acura)
+    self.gear_shifter = parse_gear_shifter(can_gear_shifter, self.acura, self.pilot)
 
     if self.accord:
       # on the accord, this doesn't seem to include cruise control

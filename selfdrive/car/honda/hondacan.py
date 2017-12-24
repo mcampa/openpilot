@@ -100,7 +100,7 @@ def create_ui_commands(pcm_speed, hud, civic, accord, crv, idx):
     commands.append(make_can_msg(0x39f, msg_0x39f, idx, 0))
   return commands
 
-def create_radar_commands(v_ego, civic, accord, crv, idx):
+def create_radar_commands(v_ego, civic, accord, crv, pilot, idx):
   """Creates an iterable of CAN messages for the radar system."""
   commands = []
   v_ego_kph = np.clip(int(round(v_ego * CV.MS_TO_KPH)), 0, 255)
@@ -121,6 +121,9 @@ def create_radar_commands(v_ego, civic, accord, crv, idx):
     commands.append(make_can_msg(0x300, msg_0x300, idx + 0xc, 1))
   elif crv:
     msg_0x301 = "\x00\x00\x50\x02\x51\x00\x00"
+    commands.append(make_can_msg(0x300, msg_0x300, idx, 1)) 
+  elif pilot:
+    msg_0x301 = "\x00\x00\x56\x02\x58\x00\x00"
     commands.append(make_can_msg(0x300, msg_0x300, idx, 1))
   else:
     msg_0x301 = "\x0f\x18\x51\x02\x5a\x00\x00"
