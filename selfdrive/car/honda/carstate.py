@@ -13,11 +13,11 @@ def parse_gear_shifter(can_gear_shifter, car_fingerprint):
   # TODO: Use values from DBC to parse this field
   if can_gear_shifter == 0x1:
     return "park"
-  elif can_gear_shifter == 0x2:
-    return "reverse"
 
   if car_fingerprint in (CAR.ACURA_ILX, CAR.ODYSSEY):
-    if can_gear_shifter == 0x3:
+    if can_gear_shifter == 0x2:
+      return "reverse"
+    elif can_gear_shifter == 0x3:
       return "neutral"
     elif can_gear_shifter == 0x4:
       return "drive"
@@ -31,9 +31,13 @@ def parse_gear_shifter(can_gear_shifter, car_fingerprint):
        return "park"
      elif can_gear_shifter == 0x20:
        return "drive"
+     elif can_gear_shifter == 0x2:
+       return "drive"
 
   elif car_fingerprint in (CAR.CIVIC, CAR.CRV):
-    if can_gear_shifter == 0x4:
+    if can_gear_shifter == 0x2:
+      return "reverse"
+    elif can_gear_shifter == 0x4:
       return "neutral"
     elif can_gear_shifter == 0x8:
       return "drive"
@@ -132,7 +136,7 @@ def get_can_signals(CP):
                 ("BRAKE_HOLD_ACTIVE", "VSA_STATUS", 0)]
     checks += [("EPB_STATUS", 50)]
   elif CP.carFingerprint == CAR.PILOT:
-    dbc_f = 'honda_pilot_touring_2017_can_generated.dbc'    
+    dbc_f = 'honda_pilot_touring_2017_can_generated.dbc'
 
   # add gas interceptor reading if we are using it
   if CP.enableGas:
