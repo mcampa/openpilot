@@ -110,7 +110,7 @@ def get_can_signals(CP):
       ("VSA_STATUS", 50),
       ("SCM_BUTTONS", 25),
   ]
- 
+
   if CP.carFingerprint not in (CAR.CRV_5G):
     signals += [("CRUISE_SPEED_PCM", "CRUISE", 0),
                 ("CRUISE_SPEED_OFFSET", "CRUISE_PARAMS", 0)]
@@ -267,7 +267,7 @@ class CarState(object):
       self.park_brake = 0  # TODO
       self.brake_hold = 0  # TODO
       self.main_on = cp.vl["SCM_BUTTONS"]['MAIN_ON']
-    
+
     self.gear_shifter = parse_gear_shifter(can_gear_shifter, self.CP.carFingerprint)
 
     self.pedal_gas = cp.vl["POWERTRAIN_DATA"]['PEDAL_GAS']
@@ -284,7 +284,7 @@ class CarState(object):
       self.steer_override = abs(cp.vl["STEER_STATUS"]['STEER_TORQUE_SENSOR']) > 1200
     self.steer_torque_driver = cp.vl["STEER_STATUS"]['STEER_TORQUE_SENSOR']
 
-    if self.CP.carFingerprint in (CAR.CRV_5G):   
+    if self.CP.carFingerprint in (CAR.CRV_5G):
       self.cruise_speed_offset = calc_cruise_offset(0, self.v_ego)
       self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
       # On set, cruise set speed pulses between 255 and the set speed prev is set to avoid this.

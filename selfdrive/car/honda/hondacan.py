@@ -77,14 +77,12 @@ def create_steering_control(packer, apply_steer, car_fingerprint, idx):
 def create_ui_commands(packer, pcm_speed, hud, car_fingerprint, idx):
   """Creates an iterable of CAN messages for the UIs."""
   commands = []
-
   bus = 0
-  
+
   # CRV_5G sends commands to bus 2.
   if car_fingerprint in (CAR.CRV_5G):
     bus = 2
-  else:  
-    # TODO: Why is X4 always 0xc1? Not implemented yet in canpacker
+  else:
     acc_hud_values = {
       'PCM_SPEED': pcm_speed * CV.MS_TO_KPH,
       'PCM_GAS': hud.pcm_accel,
@@ -96,7 +94,7 @@ def create_ui_commands(packer, pcm_speed, hud, car_fingerprint, idx):
       'SET_ME_X01': 0x01,
     }
     commands.append(packer.make_can_msg("ACC_HUD", 0, acc_hud_values, idx))
-  
+
   lkas_hud_values = {
     'SET_ME_X41': 0x41,
     'SET_ME_X48': 0x48,
