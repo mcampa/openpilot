@@ -70,7 +70,7 @@ def create_steering_control(packer, apply_steer, car_fingerprint, idx):
     "STEER_TORQUE_REQUEST": apply_steer != 0,
   }
   # Set bus 2 for accord and new crv.
-  bus = (0,2)[car_fingerprint in (CAR.CRV_5G)]
+  bus = (0,2)[car_fingerprint in (CAR.CRV_5G, CAR.ACCORD)]
   return packer.make_can_msg("STEERING_CONTROL", bus, values, idx)
 
 
@@ -79,8 +79,8 @@ def create_ui_commands(packer, pcm_speed, hud, car_fingerprint, idx):
   commands = []
   bus = 0
 
-  # CRV_5G sends commands to bus 2.
-  if car_fingerprint in (CAR.CRV_5G):
+  # Bosch sends commands to bus 2.
+  if car_fingerprint in (CAR.CRV_5G, CAR.ACCORD):
     bus = 2
   else:
     acc_hud_values = {
