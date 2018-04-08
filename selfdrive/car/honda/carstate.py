@@ -106,9 +106,6 @@ def get_can_signals(CP):
       ("SCM_BUTTONS", 25),
   ]
 
-<<<<<<< HEAD
-  if CP.carFingerprint not in (CAR.CRV_5G):
-=======
   if CP.carFingerprint in (CAR.CRV_5G, CAR.ACCORD):
     signals += [("CAR_GAS", "GAS_PEDAL_2", 0),
                 ("BRAKE_PRESSED", "BRAKE_MODULE", 0),
@@ -120,7 +117,6 @@ def get_can_signals(CP):
                ("GAS_PEDAL_2", 100)]
   else:
     # Bosch cars don't use these signals.
->>>>>>> Adds accord to bosch port
     signals += [("CRUISE_SPEED_PCM", "CRUISE", 0),
                 ("CRUISE_SPEED_OFFSET", "CRUISE_PARAMS", 0)]
     checks += [("CRUISE_PARAMS", 50)]
@@ -296,11 +292,7 @@ class CarState(object):
       self.steer_override = abs(cp.vl["STEER_STATUS"]['STEER_TORQUE_SENSOR']) > 1200
     self.steer_torque_driver = cp.vl["STEER_STATUS"]['STEER_TORQUE_SENSOR']
 
-<<<<<<< HEAD
-    if self.CP.carFingerprint in (CAR.CRV_5G):
-=======
     if self.CP.carFingerprint in (CAR.CRV_5G, CAR.ACCORD):
->>>>>>> Adds accord to bosch port
       self.cruise_speed_offset = calc_cruise_offset(0, self.v_ego)
       self.brake_pressed = cp.vl["BRAKE_MODULE"]['BRAKE_PRESSED']
       # On set, cruise set speed pulses between 255 and the set speed prev is set to avoid this.
