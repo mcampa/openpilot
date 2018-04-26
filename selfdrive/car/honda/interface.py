@@ -187,6 +187,7 @@ class CarInterface(object):
     elif candidate == CAR.ACCORD:
       stop_and_go = True
       ret.enableCamera = True
+      ret.safetyParam = 1 # Informs fw that this car uses an alternate user brake msg
       ret.mass = 3298./2.205 + std_cargo
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.39
@@ -226,6 +227,7 @@ class CarInterface(object):
     elif candidate == CAR.CRV_5G:
       stop_and_go = True
       ret.enableCamera = True
+      ret.safetyParam = 1 # Informs fw that this car uses an alternate user brake msg
       ret.mass = 3358./2.205 + std_cargo
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.41
