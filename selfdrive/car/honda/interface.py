@@ -191,7 +191,7 @@ class CarInterface(object):
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.39
       ret.steerRatio = 11.82
-      ret.steerKpV, ret.steerKiV = [[0.8], [0.24]]
+      ret.steerKpV, ret.steerKiV = [[0.4], [0.12]]
 
       ret.longitudinalKpBP = [0., 5., 35.]
       ret.longitudinalKpV = [1.2, 0.8, 0.5]
@@ -325,8 +325,8 @@ class CarInterface(object):
     ret.longPidDeadzoneBP = [0.]
     ret.longPidDeadzoneV = [0.]
 
-    ret.stoppingControl = True
-    ret.steerLimitAlert = True
+    ret.stoppingControl = False
+    ret.steerLimitAlert = False
     ret.startAccel = 0.5
 
     ret.steerRateCost = 0.5
