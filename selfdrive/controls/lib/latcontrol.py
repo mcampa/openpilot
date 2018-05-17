@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from selfdrive.controls.lib.pid import PIController
+from selfdrive.controls.lib.pid import PIDController
 from selfdrive.controls.lib.drive_helpers import MPC_COST_LAT
 from selfdrive.controls.lib.lateral_mpc import libmpc_py
 from common.numpy_fast import interp
@@ -24,11 +24,14 @@ def calc_states_after_delay(states, v_ego, steer_angle, curvature_factor, steer_
 def get_steer_max(CP, v_ego):
   return interp(v_ego, CP.steerMaxBP, CP.steerMaxV)
 
+steerKdBP = [0.]
+steerKdV = [0.4]
 
 class LatControl(object):
   def __init__(self, VM):
-    self.pid = PIController((VM.CP.steerKpBP, VM.CP.steerKpV),
+    self.pid = PIDController((VM.CP.steerKpBP, VM.CP.steerKpV),
                             (VM.CP.steerKiBP, VM.CP.steerKiV),
+                            (steerKdBP, steerKdV),
                             k_f=VM.CP.steerKf, pos_limit=1.0)
     self.last_cloudlog_t = 0.0
     self.setup_mpc(VM.CP.steerRateCost)
