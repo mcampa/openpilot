@@ -24,7 +24,7 @@ def get_steer_max(CP, v_ego):
   return interp(v_ego, CP.steerMaxBP, CP.steerMaxV)
 
 steerKdBP = [0.]
-steerKdV = [0.4]
+steerKdV = [1.]
 
 class LatControl(object):
   def __init__(self, VM):
