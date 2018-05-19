@@ -1,3 +1,4 @@
+# PYTHONPATH=/data/openpilot/ python /data/openpilot/selfdrive/debug/serverd.py
 import sys
 import json
 import zmq
