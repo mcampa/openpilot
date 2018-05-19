@@ -11,6 +11,7 @@ import selfdrive.messaging as messaging
 from selfdrive.config import Conversions as CV
 from selfdrive.services import service_list
 from selfdrive.car import get_car
+from selfdrive.debug import pid_server
 from selfdrive.controls.lib.planner import Planner
 from selfdrive.controls.lib.drive_helpers import learn_angle_offset, \
                                                  get_events, \
@@ -261,6 +262,7 @@ def state_control(plan, CS, CP, state, events, v_cruise_kph, v_cruise_kph_last, 
 
   if rk.frame % 5 == 2 and plan.lateralValid:
     # *** run this at 20hz again ***
+    pid_server.update(LaC)
     angle_offset = learn_angle_offset(active, CS.vEgo, angle_offset,
                                       PL.PP.c_poly, PL.PP.c_prob, CS.steeringAngle,
                                       CS.steeringPressed)

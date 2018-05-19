@@ -1,0 +1,22 @@
+<html>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <body>
+        <div class="container">
+            <form method="POST" action="/pid-save">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">P</label>
+                    <input type="number" step="0.01" class="form-control" name="p"  placeholder="proportinal">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">I</label>
+                    <input type="number" step="0.01" class="form-control" name="i"  placeholder="integral">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">D</label>
+                    <input type="number" step="0.01" class="form-control" name="d"  placeholder="derivative">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </body>
+</html>

@@ -44,6 +44,11 @@ class PIDController(object):
   def k_d(self):
     return interp(self.speed, self._k_d[0], self._k_d[1])
 
+  def set_pid(self, k_p, k_i, k_d):
+    self._k_p = k_p # proportional gain
+    self._k_i = k_i # integrale gain
+    self._k_d = k_d # derivative gain
+
   def _check_saturation(self, control, override, error):
     saturated = (control < self.neg_limit) or (control > self.pos_limit)
 

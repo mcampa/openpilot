@@ -73,6 +73,7 @@ EON = os.path.exists("/EON")
 managed_processes = {
   "uploader": "selfdrive.loggerd.uploader",
   "controlsd": "selfdrive.controls.controlsd",
+  "serverd": "selfdrive.debug.serverd",
   "radard": "selfdrive.controls.radard",
   "ubloxd": "selfdrive.locationd.ubloxd",
   "locationd_dummy": "selfdrive.locationd.locationd_dummy",
