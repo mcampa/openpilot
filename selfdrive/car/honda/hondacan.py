@@ -63,11 +63,11 @@ def create_gas_command(packer, gas_amount, idx):
   return packer.make_can_msg("GAS_COMMAND", 0, values, idx)
 
 
-def create_steering_control(packer, apply_steer, car_fingerprint, idx):
+def create_steering_control(packer, apply_steer, enabled, car_fingerprint, idx):
   """Creates a CAN message for the Honda DBC STEERING_CONTROL."""
   values = {
     "STEER_TORQUE": apply_steer,
-    "STEER_TORQUE_REQUEST": apply_steer != 0,
+    "STEER_TORQUE_REQUEST": enabled,
   }
   # Set bus 2 for accord and new crv.
   bus = (0,2)[car_fingerprint in (CAR.CRV_5G, CAR.ACCORD)]
