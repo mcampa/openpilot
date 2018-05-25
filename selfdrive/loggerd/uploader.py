@@ -70,7 +70,7 @@ def clear_locks(root):
 def is_on_wifi():
   # ConnectivityManager.getActiveNetworkInfo()
   result = subprocess.check_output(["service", "call", "connectivity", "2"]).strip().split("\n")
-  data = ''.join(''.join(w.decode("hex")[::-1] for w in l[14:49].split()) for l in result[1:]) 
+  data = ''.join(''.join(w.decode("hex")[::-1] for w in l[14:49].split()) for l in result[1:])
 
   return "\x00".join("WIFI") in data
 
@@ -126,26 +126,28 @@ class Uploader(object):
         return (key, fn, 0)
 
     if with_video:
-      # then upload compressed camera file
+      # then upload compressed rear and front camera files
       for name, key, fn in self.gen_upload_files():
-        if name in ["fcamera.hevc"]:
+        if name == "fcamera.hevc":
           return (key, fn, 1)
+        elif name == "dcamera.hevc":
+          return (key, fn, 2)
 
       # then upload other files
       for name, key, fn in self.gen_upload_files():
         if not name.endswith('.lock') and not name.endswith(".tmp"):
-          return (key, fn, 1)
+          return (key, fn, 3)
 
     return None
 
 
   def do_upload(self, key, fn):
     try:
-      url_resp = api_get("v1.1/"+self.dongle_id+"/upload_url/", timeout=2, path=key, access_token=self.access_token)
+      url_resp = api_get("v1.2/"+self.dongle_id+"/upload_url/", timeout=2, path=key, access_token=self.access_token)
       url_resp_json = json.loads(url_resp.text)
       url = url_resp_json['url']
       headers = url_resp_json['headers']
-      cloudlog.info("upload_url v1.1 %s %s", url, str(headers))
+      cloudlog.info("upload_url v1.2 %s %s", url, str(headers))
 
       if fake_upload:
         cloudlog.info("*** WARNING, THIS IS A FAKE UPLOAD TO %s ***" % url)

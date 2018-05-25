@@ -36,7 +36,7 @@ def car_plant(pos, speed, grade, gas, brake):
   speed_base = power_peak/force_peak
   rolling_res = 0.01
   g = 9.81
-  #frontal_area = 2.2  TODO: use it!
+  frontal_area = 2.2
   air_density = 1.225
   gas_to_peak_linear_slope = 3.33
   brake_to_peak_linear_slope = 0.3
@@ -56,7 +56,7 @@ def car_plant(pos, speed, grade, gas, brake):
   creep_accel = np.interp(speed, creep_accel_bp, creep_accel_v)
   force_creep = creep_accel * mass
 
-  force_resistance = -(rolling_res * mass * g + 0.5 * speed**2 * aero_cd * air_density)
+  force_resistance = -(rolling_res * mass * g + 0.5 * speed**2 * aero_cd * air_density * frontal_area)
   force = force_gas + force_brake + force_resistance + force_grade + force_creep
   acceleration = force / mass
 
@@ -90,7 +90,6 @@ class Plant(object):
 
   def __init__(self, lead_relevancy=False, rate=100, speed=0.0, distance_lead=2.0):
     self.rate = rate
-    self.brake_only = False
 
     if not Plant.messaging_initialized:
       context = zmq.Context()
@@ -211,6 +210,7 @@ class Plant(object):
       print "%6.2f m  %6.2f m/s  %6.2f m/s2   %.2f ang   gas: %.2f  brake: %.2f  steer: %5.2f     lead_rel: %6.2f m  %6.2f m/s" % (distance, speed, acceleration, self.angle_steer, gas, brake, steer_torque, d_rel, v_rel)
 
     # ******** publish the car ********
+    # TODO: the order is this list should not matter, but currently everytime we change carstate we break this test. Fix it!
     vls = [self.speed_sensor(speed), self.speed_sensor(speed), self.speed_sensor(speed), self.speed_sensor(speed), self.speed_sensor(speed),
            self.angle_steer, self.angle_steer_rate, 0,
            0, 0, 0, 0,  # Doors
