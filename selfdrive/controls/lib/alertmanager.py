@@ -120,7 +120,7 @@ class AlertManager(object):
 
     "steerTempUnavailableNoEntry": Alert(
         "openpilot Unavailable",
-        "Steering Temporarily Unavailable",
+        "Steering Temporarily Unavailable NE",
         AlertStatus.normal, AlertSize.mid,
         Priority.LOW, None, "chimeDouble", .4, 0., 3.),
 
@@ -130,11 +130,11 @@ class AlertManager(object):
         AlertStatus.userPrompt, AlertSize.mid,
         Priority.LOW, None, None, 0., 0., .2),
 
-    "debugAlert": Alert( 
-        "DEBUG ALERT", 
-        "", 
-        AlertStatus.userPrompt, AlertSize.mid, 
-        Priority.LOW, None, None, .1, .1, .1), 
+    "debugAlert": Alert(
+        "DEBUG ALERT",
+        "",
+        AlertStatus.userPrompt, AlertSize.mid,
+        Priority.LOW, None, None, .1, .1, .1),
 
     # Non-entry only alerts
     "wrongCarModeNoEntry": Alert(
