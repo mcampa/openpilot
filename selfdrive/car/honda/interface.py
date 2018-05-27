@@ -166,7 +166,7 @@ class CarInterface(object):
     tireStiffnessFront_civic = 85400
     tireStiffnessRear_civic = 90000
 
-    ret.steerKiBP, ret.steerKpBP = [[0.], [0.]]
+    ret.steerKiBP, ret.steerKpBP = [[0.8], [0.24]]
     if candidate == CAR.CIVIC:
       stop_and_go = True
       ret.mass = mass_civic
@@ -189,7 +189,7 @@ class CarInterface(object):
       ret.wheelbase = 2.67
       ret.centerToFront = ret.wheelbase * 0.39
       ret.steerRatio = 11.82
-      ret.steerKpV, ret.steerKiV = [[0.8], [0.24]]
+      ret.steerKpV, ret.steerKiV = [[0.4], [0.12]]
 
       ret.longitudinalKpBP = [0., 5., 35.]
       ret.longitudinalKpV = [1.2, 0.8, 0.5]
@@ -229,7 +229,7 @@ class CarInterface(object):
       ret.centerToFront = ret.wheelbase * 0.41
       ret.steerRatio = 12.30
       ret.steerKpV, ret.steerKiV = [[0.8], [0.24]]
- 
+
       ret.longitudinalKpBP = [0., 5., 35.]
       ret.longitudinalKpV = [1.2, 0.8, 0.5]
       ret.longitudinalKiBP = [0., 35.]

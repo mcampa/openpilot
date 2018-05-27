@@ -24,8 +24,8 @@ def calc_states_after_delay(states, v_ego, steer_angle, curvature_factor, steer_
 def get_steer_max(CP, v_ego):
   return interp(v_ego, CP.steerMaxBP, CP.steerMaxV)
 
-steerKdBP = [0.]
-steerKdV = [0.4]
+steerKdBP = [0.02]
+steerKdV = [0.01]
 
 class LatControl(object):
   def __init__(self, VM):
