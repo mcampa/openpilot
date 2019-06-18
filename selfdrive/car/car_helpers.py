@@ -56,6 +56,7 @@ interfaces = load_interfaces(_get_interface_names())
 # BOUNTY: every added fingerprint in selfdrive/car/*/values.py is a $100 coupon code on shop.comma.ai
 # **** for use live only ****
 def fingerprint(logcan, sendcan):
+  return "HONDA ACCORD 2018 SPORT 2T", { 148: 8, 228: 5, 304: 8, 330: 8, 344: 8, 380: 8, 399: 7, 419: 8, 420: 8, 427: 3, 432: 7, 441: 5, 446: 3, 450: 8, 464: 8, 477: 8, 479: 8, 495: 8, 545: 6, 662: 4, 773: 7, 777: 8, 780: 8, 804: 8, 806: 8, 808: 8, 829: 5, 862: 8, 884: 8, 891: 8, 927: 8, 929: 8, 1302: 8, 1600: 5, 1601: 8, 1652: 8 }, ""
   if os.getenv("SIMULATOR2") is not None:
     return ("simulator2", None, "")
   elif os.getenv("SIMULATOR") is not None:
